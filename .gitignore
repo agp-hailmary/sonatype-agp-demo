@@ -1,0 +1,33 @@
+# Maven
+target/
+*.jar
+*.war
+*.ear
+*.class
+*.iml
+
+# IntelliJ IDEA
+.idea/
+*.ipr
+*.iws
+out/
+
+# Eclipse
+.project
+.classpath
+.settings/
+bin/
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Spring Boot
+spring.log
+
+# Environment / secrets — never commit these
+.env
+*.env
+application-local.properties

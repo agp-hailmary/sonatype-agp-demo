@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.3</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.sonatype.demo</groupId>
+    <artifactId>lifecycle-demo-store</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>Sonatype Lifecycle Demo Store</name>
+    <description>
+        Demo application for showcasing Sonatype Lifecycle dependency management features:
+        - Golden PRs (automated upgrade suggestions)
+        - Reachability Analysis (distinguishing reachable vs unreachable vulnerabilities)
+        - Automated Waivers (auto-waiving non-reachable vulnerabilities)
+    </description>
+
+    <properties>
+        <java.version>17</java.version>
+
+        <!--
+          ══════════════════════════════════════════════════════════════════
+          DEMO VULNERABILITY OVERRIDE — log4j-core pinned to 2.14.1
+          CVE-2021-44228 (Log4Shell) CVSS 10.0
+          Golden PR will suggest: log4j-core → 2.17.2
+          Reachability: REACHABLE via SearchService (logger called with user input)
+          Policy action: FAIL build
+          ══════════════════════════════════════════════════════════════════
+        -->
+        <log4j2.version>2.14.1</log4j2.version>
+    </properties>
+
+    <dependencies>
+
+        <!-- ── Spring Boot Web (logback replaced with log4j2 below) ──────── -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!--
+          ══════════════════════════════════════════════════════════════════
+          GOLDEN PR #1 — log4j-core 2.14.1 → 2.17.2
+          CVE-2021-44228 (Log4Shell) CVSS: 10.0  Critical
+          Reachability: REACHABLE
+            SearchService calls logger.info(userQuery) — the JNDI lookup
+            sink is in the log4j core message formatting pipeline.
+          Policy action: FAIL build
+          ══════════════════════════════════════════════════════════════════
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+        </dependency>
+
+        <!-- Spring Data JPA -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!--
+          ══════════════════════════════════════════════════════════════════
+          GOLDEN PR #2 — h2 2.1.212 → 2.1.214
+          CVE-2022-23221  CVSS: 9.8  Critical
+          RCE via H2 Console INIT RUNSCRIPT (similar to Log4Shell JNDI)
+          Reachability: NOT REACHABLE
+            spring.h2.console.enabled=false — the servlet entry-point for
+            the exploit is never registered. Safe candidate for Automated Waiver.
+          ══════════════════════════════════════════════════════════════════
+        -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>2.1.212</version>
+        </dependency>
+
+        <!--
+          ══════════════════════════════════════════════════════════════════
+          GOLDEN PR #3 — commons-text 1.9 → 1.10.0
+          CVE-2022-42889 (Text4Shell) CVSS: 9.8  Critical
+          Reachability: REACHABLE
+            NotificationService.processTemplate() calls
+            StringSubstitutor.replace(userProvidedTemplate), placing the
+            vulnerable interpolation sink directly in the call graph.
+          Policy action: FAIL build
+          ══════════════════════════════════════════════════════════════════
+        -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.9</version>
+        </dependency>
+
+        <!--
+          ══════════════════════════════════════════════════════════════════
+          GOLDEN PR #4 — commons-collections 3.2.1 → 3.2.2
+          CVE-2015-6420  CVSS: 7.5  High
+          Unsafe deserialization gadget chain via InvokerTransformer
+          Reachability: NOT REACHABLE
+            InventoryService imports the library and uses only the safe
+            StringValueTransformer. InvokerTransformer is never instantiated
+            or invoked — ideal Automated Waiver candidate.
+          ══════════════════════════════════════════════════════════════════
+        -->
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+
+        <!--
+          ══════════════════════════════════════════════════════════════════
+          GOLDEN PR #5 — snakeyaml (transitive via Spring Boot 2.7.3)
+          Spring Boot 2.7.3 manages snakeyaml at 1.30
+          CVE-2022-25857  CVSS: 7.5  High  (DoS via billion-laughs YAML)
+          Reachability: Spring Boot internal config loading only (trusted source)
+          Sonatype will flag and suggest upgrade to 1.31+
+          ══════════════════════════════════════════════════════════════════
+        -->
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
