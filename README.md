@@ -1,6 +1,8 @@
 # Sonatype Lifecycle Demo App
 
-A small Spring Boot e-commerce API purpose-built to demonstrate three Sonatype Lifecycle capabilities in a live session:
+A small Spring Boot e-commerce API purpose-built to demonstrate three Sonatype Lifecycle capabilities in a live session.
+
+<!-- trigger scan -->
 
 | Capability | What it shows |
 |---|---|
