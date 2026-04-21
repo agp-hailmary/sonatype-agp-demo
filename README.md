@@ -2,7 +2,7 @@
 
 A small Spring Boot e-commerce API purpose-built to demonstrate three Sonatype Lifecycle capabilities in a live session.
 
-<!-- trigger scan -->
+<!-- trigger scan: golden-pr-fix-directdependency -->
 
 | Capability | What it shows |
 |---|---|
