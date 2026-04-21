@@ -18,7 +18,7 @@ A small Spring Boot e-commerce API purpose-built to demonstrate three Sonatype L
 | 2 | `commons-text` | 1.9 | CVE-2022-42889 (Text4Shell) | **9.8** | ✅ REACHABLE | Reachability → FAIL build |
 | 3 | `h2` | 2.1.212 | CVE-2022-23221 | **9.8** | ❌ NOT REACHABLE | Automated Waiver |
 | 4 | `commons-collections` | 3.2.1 | CVE-2015-6420 | **7.5** | ❌ NOT REACHABLE | Automated Waiver |
-| 5 | `snakeyaml` | 1.30 *(transitive)* | CVE-2022-25857 | **7.5** | — | Golden PR only |
+| 5 | `snakeyaml` | 1.30 | CVE-2022-25857 | **7.5** | — | Golden PR only |
 
 ---
 
