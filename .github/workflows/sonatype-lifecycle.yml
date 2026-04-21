@@ -42,6 +42,14 @@ jobs:
       #   • CVE-2022-23221 (H2 console, CVSS 9.8)  — NOT REACHABLE → Automated Waiver
       #   • CVE-2015-6420  (commons-collections)   — NOT REACHABLE → Automated Waiver
       #   • CVE-2022-25857 (snakeyaml, CVSS 7.5)   — transitive dep → Golden PR
+      #
+      # Reachability Analysis:
+      #   enable-reachability — traces call graphs in JVM bytecode to determine
+      #     whether the vulnerable method is actually reachable from the application.
+      #   reachability-namespaces — limits the call-graph traversal to this app's
+      #     package so analysis is fast and focused on real call paths.
+      #   scan-targets — the Spring Boot fat JAR (contains all embedded deps AND
+      #     the application bytecode that Lifecycle uses for call-graph analysis).
       - name: Sonatype Lifecycle Evaluation
         uses: sonatype/actions/evaluate@v1
         with:
@@ -50,7 +58,9 @@ jobs:
           password: ${{ secrets.IQ_PASSWORD }}
           application-id: sonatype-lifecycle-demo
           stage: build
-          scan-targets: .
+          scan-targets: target/lifecycle-demo-store-1.0.0-SNAPSHOT.jar
+          enable-reachability: true
+          reachability-namespaces: com.sonatype.demo
         env:
           NEXUS_IQ_BRANCH: ${{ github.ref_name }}
 

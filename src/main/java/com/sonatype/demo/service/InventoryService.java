@@ -37,7 +37,7 @@ import java.util.Map;
 public class InventoryService {
 
     // Uses only the SAFE StringValueTransformer — InvokerTransformer is NEVER instantiated
-    private final Transformer nameFormatter = StringValueTransformer.stringValueTransformer();
+    private final Transformer nameFormatter = StringValueTransformer.getInstance();
 
     /**
      * Returns current stock levels per product category.

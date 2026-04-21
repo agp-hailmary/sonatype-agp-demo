@@ -5,7 +5,6 @@ import com.sonatype.demo.repository.ProductRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -33,27 +32,27 @@ public class DataInitializer implements CommandLineRunner {
         }
 
         List<Product> products = List.of(
-            product("Laptop Pro 15",       "High-performance laptop with 16 GB RAM",   new BigDecimal("1299.99"), "electronics"),
-            product("Wireless Mouse",       "Ergonomic wireless mouse, 2.4 GHz",        new BigDecimal("29.99"),   "electronics"),
-            product("USB-C Hub",            "7-in-1 USB-C hub with 4K HDMI",            new BigDecimal("49.99"),   "electronics"),
-            product("Noise Cancelling Headphones", "Over-ear ANC headphones",           new BigDecimal("199.99"),  "electronics"),
-            product("Mechanical Keyboard",  "TKL mechanical keyboard, Cherry MX",       new BigDecimal("89.99"),   "electronics"),
-            product("Standing Desk",        "Electric height-adjustable standing desk", new BigDecimal("599.99"),  "furniture"),
-            product("Ergonomic Chair",      "Mesh back ergonomic office chair",         new BigDecimal("449.99"),  "furniture"),
-            product("Monitor Stand",        "Bamboo monitor riser with storage",        new BigDecimal("39.99"),   "furniture"),
-            product("The Clean Coder",      "Robert C. Martin — professional software", new BigDecimal("34.99"),   "books"),
-            product("Designing Data-Intensive Applications", "Martin Kleppmann",        new BigDecimal("49.99"),   "books"),
-            product("Spring Boot in Action","Craig Walls — Spring Boot guide",          new BigDecimal("44.99"),   "books"),
-            product("Coffee Mug",           "12 oz ceramic mug — \"Fix the bug\"",      new BigDecimal("14.99"),   "accessories"),
-            product("Cable Management Kit", "Velcro ties + cable clips bundle",         new BigDecimal("9.99"),    "accessories"),
-            product("Webcam 1080p",         "Full HD webcam with built-in mic",         new BigDecimal("79.99"),   "electronics"),
-            product("Smart Speaker",        "Voice-controlled Bluetooth speaker",       new BigDecimal("99.99"),   "electronics")
+            product("Laptop Pro 15",       "High-performance laptop with 16 GB RAM",   1299.99, "electronics"),
+            product("Wireless Mouse",       "Ergonomic wireless mouse, 2.4 GHz",        29.99,   "electronics"),
+            product("USB-C Hub",            "7-in-1 USB-C hub with 4K HDMI",            49.99,   "electronics"),
+            product("Noise Cancelling Headphones", "Over-ear ANC headphones",           199.99,  "electronics"),
+            product("Mechanical Keyboard",  "TKL mechanical keyboard, Cherry MX",       89.99,   "electronics"),
+            product("Standing Desk",        "Electric height-adjustable standing desk", 599.99,  "furniture"),
+            product("Ergonomic Chair",      "Mesh back ergonomic office chair",         449.99,  "furniture"),
+            product("Monitor Stand",        "Bamboo monitor riser with storage",        39.99,   "furniture"),
+            product("The Clean Coder",      "Robert C. Martin — professional software", 34.99,   "books"),
+            product("Designing Data-Intensive Applications", "Martin Kleppmann",        49.99,   "books"),
+            product("Spring Boot in Action","Craig Walls — Spring Boot guide",          44.99,   "books"),
+            product("Coffee Mug",           "12 oz ceramic mug — \"Fix the bug\"",      14.99,   "accessories"),
+            product("Cable Management Kit", "Velcro ties + cable clips bundle",         9.99,    "accessories"),
+            product("Webcam 1080p",         "Full HD webcam with built-in mic",         79.99,   "electronics"),
+            product("Smart Speaker",        "Voice-controlled Bluetooth speaker",       99.99,   "electronics")
         );
 
         productRepository.saveAll(products);
     }
 
-    private Product product(String name, String description, BigDecimal price, String category) {
+    private Product product(String name, String description, double price, String category) {
         Product p = new Product();
         p.setName(name);
         p.setDescription(description);
