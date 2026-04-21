@@ -25,17 +25,6 @@
 
     <properties>
         <java.version>17</java.version>
-
-        <!--
-          ══════════════════════════════════════════════════════════════════
-          DEMO VULNERABILITY OVERRIDE — log4j-core pinned to 2.14.1
-          CVE-2021-44228 (Log4Shell) CVSS 10.0
-          Golden PR will suggest: log4j-core → 2.17.2
-          Reachability: REACHABLE via SearchService (logger called with user input)
-          Policy action: FAIL build
-          ══════════════════════════════════════════════════════════════════
-        -->
-        <log4j2.version>2.14.1</log4j2.version>
     </properties>
 
     <dependencies>
@@ -52,6 +41,12 @@
             </exclusions>
         </dependency>
 
+        <!-- ── Log4j2 starter (replaces logback) ────────────────────────── -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+        </dependency>
+
         <!--
           ══════════════════════════════════════════════════════════════════
           GOLDEN PR #1 — log4j-core 2.14.1 → 2.17.2
@@ -63,8 +58,9 @@
           ══════════════════════════════════════════════════════════════════
         -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-log4j2</artifactId>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.14.1</version>
         </dependency>
 
         <!-- Spring Data JPA -->
@@ -125,13 +121,19 @@
 
         <!--
           ══════════════════════════════════════════════════════════════════
-          GOLDEN PR #5 — snakeyaml (transitive via Spring Boot 2.7.3)
-          Spring Boot 2.7.3 manages snakeyaml at 1.30
+          GOLDEN PR #5 — snakeyaml 1.30 → 1.31+
           CVE-2022-25857  CVSS: 7.5  High  (DoS via billion-laughs YAML)
           Reachability: Spring Boot internal config loading only (trusted source)
-          Sonatype will flag and suggest upgrade to 1.31+
+          Policy action: WARN / Golden PR suggestion
+          Note: Spring Boot 2.7.3 BOM already manages this at 1.30 — declaring
+          it explicitly here makes it a direct dep so IQ can create a Golden PR.
           ══════════════════════════════════════════════════════════════════
         -->
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.30</version>
+        </dependency>
 
         <!-- Testing -->
         <dependency>
