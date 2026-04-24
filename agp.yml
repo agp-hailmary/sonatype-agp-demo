@@ -1,0 +1,61 @@
+# Sonatype Guide — Agentic Patches (AGP) configuration
+# Learn more: https://guide.sonatype.com
+# File: agp.yml
+
+version: "1"
+
+# Paths and packages AGP should skip during scanning.
+ignore:
+  paths:
+    - "**/target/**"    # Maven build output
+  packages: []          # Package names AGP should never upgrade
+
+# Build validation to run after each proposed upgrade.
+# Keep these commands FAST and FOCUSED — they run for every candidate
+# upgrade. Prefer compilation, type-checking, and linting. Avoid full
+# test suites, integration tests, and anything that takes more than a
+# minute or two. Heavier checks belong in the PR's normal CI.
+validation:
+  enabled: true
+  commands:
+    - "mvn -q compile"  # Fast Maven compilation check (Java 17 / Spring Boot)
+  timeout: 10m
+
+# Pull request settings.
+pr:
+  labels: [dependencies, automated, agp]
+  draft: false
+  titleTemplate: "chore(deps): {{.GroupName}}"
+  branchTemplate: "agp/{{.GroupID}}"
+  reviewers: []
+
+# Rate limiting — caps PR volume per run and enforces a cool-down
+# between PRs for the same dependency by semver bump type.
+limits:
+  maxOpenPRs: 5
+  maxPRsPerRun: 10
+  waitPeriod:
+    major: 7d
+    minor: 3d
+    patch: 1d
+
+# Auto-merge — disabled by default.
+# automerge:
+#   enabled: false
+#   method: squash  # "squash" | "merge" | "rebase"
+
+# How to group updates into PRs. See AGP docs for available strategies.
+grouping:
+  strategy: individual
+  rules: []
+
+# Monorepo per-project overrides. Uncomment and populate one entry per
+# sub-project that has its own manifest and build commands. Apply the
+# same fast-validation guidance per sub-project.
+# projects:
+#   backend:
+#     path: backend
+#     ecosystem: maven
+#     validation:
+#       enabled: true
+#       commands: ["mvn -q compile"]
