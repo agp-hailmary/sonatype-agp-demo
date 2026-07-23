@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "sonatype-guide": {
+      "type": "http",
+      "url": "https://mcp.guide.sonatype.com/mcp",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer sonatype_pat_kZozMnLNT1xS6WMuzDDH7N-V2OwSq2S3PGApxdF8j3eAzbJi"
+      },
+      "description": "Sonatype Guide MCP - Dependency intelligence for security, license, and quality analysis"
+    }
+  }
+}
