@@ -24,6 +24,8 @@
 # Optional:
 #   - set variable AGP_API_URL to a specific Sonatype Guide Environment, if not provided
 #     defaults to https://b2ff-186-28-194-175.ngrok-free.app/api/agp, the address this file was generated for.
+#   - set variable AGP_OIDC_AUDIENCE to IQ's Base URL without the trailing slash; it must match it, and
+#     defaults to https://b2ff-186-28-194-175.ngrok-free.app.
 
 name: Sonatype Guide - Agent P
 
@@ -89,7 +91,7 @@ jobs:
         uses: sonatype/agp-action/gate@v1
         with:
           guide-url: ${{ vars.AGP_API_URL || 'https://b2ff-186-28-194-175.ngrok-free.app/api/agp' }}
-          audience: https://b2ff-186-28-194-175.ngrok-free.app
+          audience: ${{ vars.AGP_OIDC_AUDIENCE || 'https://b2ff-186-28-194-175.ngrok-free.app' }}
 
   agp:
     needs: gate
@@ -108,7 +110,7 @@ jobs:
         uses: sonatype/agp-action/gate@v1
         with:
           guide-url: ${{ vars.AGP_API_URL || 'https://b2ff-186-28-194-175.ngrok-free.app/api/agp' }}
-          audience: https://b2ff-186-28-194-175.ngrok-free.app
+          audience: ${{ vars.AGP_OIDC_AUDIENCE || 'https://b2ff-186-28-194-175.ngrok-free.app' }}
 
       - name: Run AGP
         uses: sonatype/agp-action@v1
@@ -122,6 +124,6 @@ jobs:
           repo_id: ${{ inputs.repo_id || '' }}
           vulnerabilities: ${{ inputs.vulnerabilities }}
           verbose: ${{ inputs.verbose || 'false' }}
-          audience: https://b2ff-186-28-194-175.ngrok-free.app
+          audience: ${{ vars.AGP_OIDC_AUDIENCE || 'https://b2ff-186-28-194-175.ngrok-free.app' }}
         env:
           AGP_API_URL: ${{ vars.AGP_API_URL || 'https://b2ff-186-28-194-175.ngrok-free.app/api/agp' }}
